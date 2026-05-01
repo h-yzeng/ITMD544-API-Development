@@ -20,6 +20,7 @@ export function createApp() {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
   app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+  app.get('/', (_req, res) => res.redirect('/api-docs'));
 
   app.use(errorHandler);
   return app;
