@@ -42,12 +42,12 @@ export const appointmentRepository = {
   },
 
   async create(input: CreateAppointmentInput): Promise<Appointment> {
-    const result = await pool.query<Appointment>(
+    const result = await pool.query<{ id: number }>(
       `INSERT INTO appointments (patient_id, doctor_id, scheduled_at, reason, notes)
-       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+       VALUES ($1, $2, $3, $4, $5) RETURNING id`,
       [input.patient_id, input.doctor_id, input.scheduled_at, input.reason ?? null, input.notes ?? null],
     );
-    return result.rows[0];
+    return this.findById(result.rows[0].id) as Promise<Appointment>;
   },
 
   async update(id: number, input: UpdateAppointmentInput): Promise<Appointment | null> {
@@ -61,11 +61,11 @@ export const appointmentRepository = {
     if (!fields.length) return this.findById(id);
     fields.push(`updated_at = NOW()`);
     values.push(id);
-    const result = await pool.query<Appointment>(
-      `UPDATE appointments SET ${fields.join(', ')} WHERE id = $${i} RETURNING *`,
+    await pool.query(
+      `UPDATE appointments SET ${fields.join(', ')} WHERE id = $${i}`,
       values,
     );
-    return result.rows[0] ?? null;
+    return this.findById(id);
   },
 
   async delete(id: number): Promise<boolean> {
