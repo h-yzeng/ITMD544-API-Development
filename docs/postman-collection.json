@@ -1,0 +1,523 @@
+{
+  "info": {
+    "name": "Hospital Appointment System API",
+    "description": "Complete collection for the Hospital Appointment System REST and GraphQL APIs. Import this file into Postman via File → Import.\n\nBase URL variable: {{baseUrl}}\nSet to https://hospital-appointment-api-k4kc.onrender.com for production\nSet to http://localhost:3000 for local development",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://hospital-appointment-api-k4kc.onrender.com",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Returns {\"status\": \"ok\"} if the server is running."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Patients",
+      "item": [
+        {
+          "name": "List All Patients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/patients?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            },
+            "description": "Returns a paginated list of all patients."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Patient by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/patients/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients", "1"]
+            },
+            "description": "Returns a single patient by ID. Returns 404 if not found."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Doe\",\n  \"email\": \"jane.doe@example.com\",\n  \"phone\": \"555-1234\",\n  \"date_of_birth\": \"1990-05-15\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients"]
+            },
+            "description": "Creates a new patient. Returns 201 with the created record. Returns 400 if validation fails (missing required fields or invalid email format)."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Patient — Validation Error",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Jane\",\n  \"email\": \"not-a-valid-email\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients"]
+            },
+            "description": "Demonstrates Zod validation error — missing last_name and invalid email format. Returns 400 with field-level errors."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Patient Appointments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/patients/1/appointments?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients", "1", "appointments"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            },
+            "description": "Returns all appointments for a specific patient. Returns 404 if patient does not exist."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Doctors",
+      "item": [
+        {
+          "name": "List All Doctors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/doctors?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctors"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            },
+            "description": "Returns a paginated list of all doctors."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Doctor by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/doctors/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctors", "1"]
+            },
+            "description": "Returns a single doctor by ID. Returns 404 if not found."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Doctor",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Sarah\",\n  \"last_name\": \"Chen\",\n  \"email\": \"schen@hospital.com\",\n  \"specialty\": \"Cardiology\",\n  \"phone\": \"555-0001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/doctors",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctors"]
+            },
+            "description": "Creates a new doctor. Returns 201 with the created record."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Doctor Appointments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/doctors/1/appointments?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctors", "1", "appointments"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            },
+            "description": "Returns all appointments for a specific doctor. Returns 404 if doctor does not exist."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Appointments",
+      "item": [
+        {
+          "name": "Get Appointment by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/appointments/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "appointments", "1"]
+            },
+            "description": "Returns a single appointment with nested patient and doctor objects. Returns 404 if not found."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Appointment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": 1,\n  \"doctor_id\": 1,\n  \"scheduled_at\": \"2026-06-15T10:00:00.000Z\",\n  \"reason\": \"Annual checkup\",\n  \"notes\": \"Patient reports no recent issues\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/appointments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "appointments"]
+            },
+            "description": "Creates a new appointment. Validates that both patient_id and doctor_id reference existing records — returns 404 if either is not found."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Appointment — Patient Not Found",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": 99999,\n  \"doctor_id\": 1,\n  \"scheduled_at\": \"2026-06-15T10:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/appointments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "appointments"]
+            },
+            "description": "Demonstrates service-layer validation — non-existent patient_id returns 404 with {\"message\": \"Patient not found\"}."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Appointment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\",\n  \"notes\": \"Patient doing well, follow-up in 6 months\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/appointments/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "appointments", "1"]
+            },
+            "description": "Updates an existing appointment. All fields are optional — only provided fields are updated. Returns the updated appointment object."
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel (Delete) Appointment",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/appointments/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "appointments", "1"]
+            },
+            "description": "Deletes an appointment by ID. Returns 204 No Content on success. Returns 404 if not found."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "GraphQL",
+      "item": [
+        {
+          "name": "Query — List Patients",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetPatients {\\n  patients(page: 1, limit: 10) {\\n    data {\\n      id\\n      first_name\\n      last_name\\n      email\\n      phone\\n      date_of_birth\\n    }\\n    total\\n    page\\n    limit\\n  }\\n}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "Fetches a paginated list of patients via GraphQL."
+          },
+          "response": []
+        },
+        {
+          "name": "Query — Get Single Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetPatient {\\n  patient(id: \\\"1\\\") {\\n    id\\n    first_name\\n    last_name\\n    email\\n    created_at\\n  }\\n}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "Fetches a single patient by ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Query — List Doctors",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetDoctors {\\n  doctors(page: 1, limit: 10) {\\n    data {\\n      id\\n      first_name\\n      last_name\\n      specialty\\n      email\\n    }\\n    total\\n  }\\n}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "Fetches a paginated list of doctors via GraphQL."
+          },
+          "response": []
+        },
+        {
+          "name": "Query — Get Appointment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetAppointment {\\n  appointment(id: \\\"1\\\") {\\n    id\\n    scheduled_at\\n    status\\n    reason\\n    notes\\n    patient {\\n      id\\n      first_name\\n      last_name\\n      email\\n    }\\n    doctor {\\n      id\\n      first_name\\n      last_name\\n      specialty\\n    }\\n  }\\n}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "Fetches a single appointment with nested patient and doctor objects."
+          },
+          "response": []
+        },
+        {
+          "name": "Query — Patient Appointments",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetPatientAppointments {\\n  patientAppointments(patientId: \\\"1\\\", page: 1, limit: 10) {\\n    data {\\n      id\\n      scheduled_at\\n      status\\n      reason\\n      doctor {\\n        first_name\\n        last_name\\n        specialty\\n      }\\n    }\\n    total\\n    page\\n    limit\\n  }\\n}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "Fetches all appointments for a specific patient."
+          },
+          "response": []
+        },
+        {
+          "name": "Query — Doctor Appointments",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetDoctorAppointments {\\n  doctorAppointments(doctorId: \\\"1\\\", page: 1, limit: 10) {\\n    data {\\n      id\\n      scheduled_at\\n      status\\n      patient {\\n        first_name\\n        last_name\\n      }\\n    }\\n    total\\n  }\\n}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "Fetches all appointments for a specific doctor."
+          },
+          "response": []
+        },
+        {
+          "name": "Mutation — Create Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreatePatient {\\n  createPatient(\\n    first_name: \\\"John\\\"\\n    last_name: \\\"Smith\\\"\\n    email: \\\"john.smith@example.com\\\"\\n    phone: \\\"555-9876\\\"\\n    date_of_birth: \\\"1985-03-22\\\"\\n  ) {\\n    id\\n    first_name\\n    last_name\\n    email\\n    created_at\\n  }\\n}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "Creates a new patient via GraphQL mutation."
+          },
+          "response": []
+        },
+        {
+          "name": "Mutation — Create Doctor",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreateDoctor {\\n  createDoctor(\\n    first_name: \\\"Sarah\\\"\\n    last_name: \\\"Chen\\\"\\n    email: \\\"schen@hospital.com\\\"\\n    specialty: \\\"Cardiology\\\"\\n    phone: \\\"555-0001\\\"\\n  ) {\\n    id\\n    first_name\\n    last_name\\n    specialty\\n    created_at\\n  }\\n}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "Creates a new doctor via GraphQL mutation."
+          },
+          "response": []
+        },
+        {
+          "name": "Mutation — Create Appointment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreateAppointment {\\n  createAppointment(\\n    patient_id: \\\"1\\\"\\n    doctor_id: \\\"1\\\"\\n    scheduled_at: \\\"2026-06-15T10:00:00.000Z\\\"\\n    reason: \\\"Annual checkup\\\"\\n    notes: \\\"Patient reports no recent issues\\\"\\n  ) {\\n    id\\n    scheduled_at\\n    status\\n    reason\\n    patient {\\n      first_name\\n      last_name\\n    }\\n    doctor {\\n      first_name\\n      specialty\\n    }\\n  }\\n}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "Creates a new appointment via GraphQL mutation. Returns nested patient and doctor objects."
+          },
+          "response": []
+        },
+        {
+          "name": "Mutation — Update Appointment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UpdateAppointment {\\n  updateAppointment(\\n    id: \\\"1\\\"\\n    status: completed\\n    notes: \\\"Patient doing well, follow-up in 6 months\\\"\\n  ) {\\n    id\\n    status\\n    notes\\n    patient {\\n      first_name\\n    }\\n  }\\n}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "Updates an appointment status and notes via GraphQL mutation."
+          },
+          "response": []
+        },
+        {
+          "name": "Mutation — Delete Appointment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation DeleteAppointment {\\n  deleteAppointment(id: \\\"1\\\")\\n}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "Deletes an appointment via GraphQL mutation. Returns true on success, false if not found."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
