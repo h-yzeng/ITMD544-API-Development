@@ -22,10 +22,13 @@
   },
   "homepage": "https://github.com/h-yzeng/ITMD544-API-Development#readme",
   "dependencies": {
+    "@apollo/server": "^5.5.0",
+    "@as-integrations/express5": "^1.1.2",
     "@neondatabase/serverless": "^1.1.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "graphql": "^16.13.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "ws": "^8.20.0",
